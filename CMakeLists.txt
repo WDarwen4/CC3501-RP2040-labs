@@ -82,6 +82,7 @@ else()
         tests/mocks/hardware/gpio.cpp
         tests/mocks/hardware/pio.cpp
         tests/mocks/ws2812.cpp
+        leds.cpp
     )
     target_include_directories(labs
         PUBLIC 

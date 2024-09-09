@@ -1,38 +1,40 @@
 #include <stdio.h>
+#include <stdint.h>
 #include "pico/stdlib.h"
-#include "hardware/gpio.h"
 #include "hardware/pio.h"
+#include "drivers/leds.h"
+#include "ws2812.pio.h"
 
-#include "WS2812.pio.h" // This header file gets produced during compilation from the WS2812.pio file
-#include "drivers/logging/logging.h"
-
-#define LED_PIN 14
-
-int main()
-{
+int main() {
     stdio_init_all();
 
-    // Initialise PIO0 to control the LED chain
+    // Initialize PIO0 to control the LED chain
     uint pio_program_offset = pio_add_program(pio0, &ws2812_program);
     ws2812_program_init(pio0, 0, pio_program_offset, LED_PIN, 800000, false);
-    uint32_t led_data [1];
 
+    // Initialize LED states
+    initialize_led_states();
+
+    // Example of changing a single LED
+    set_led_color(0, 255, 0, 0); // Set LED 0 
+    set_led_color(1, 0, 255, 0); // Set LED 1 
+    set_led_color(2, 0, 0, 255); // Set LED 2 
+    set_led_color(3, 255, 0, 0); // Set LED 3
+    set_led_color(4, 0, 255, 0); // Set LED 4 
+    set_led_color(5, 0, 0, 255); // Set LED 5 
+    set_led_color(6, 255, 0, 0); // Set LED 6 
+    set_led_color(7, 0, 255, 0); // Set LED 7 
+    set_led_color(8, 0, 0, 255); // Set LED 8 
+    set_led_color(9, 255, 0, 0); // Set LED 9
+    set_led_color(10, 0, 255, 0); // Set LED 10 
+    set_led_color(11, 0, 0, 255); // Set LED 11
+
+    // Update all LEDs
+    update_leds();
+
+    // Main loop
     for (;;) {
-        // Test the log system
-        log(LogLevel::INFORMATION, "Hello world");
-
-        // Turn on the first LED to be a certain colour
-        uint8_t red = 0;
-        uint8_t green = 0;
-        uint8_t blue = 255;
-        led_data[0] = (red << 24) | (green << 16) | (blue << 8);
-        pio_sm_put_blocking(pio0, 0, led_data[0]);
-        sleep_ms(500);
-
-        // Set the first LED off 
-        led_data[0] = 0;
-        pio_sm_put_blocking(pio0, 0, led_data[0]);
-        sleep_ms(500);
+        
     }
 
     return 0;
